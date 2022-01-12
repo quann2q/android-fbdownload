@@ -39,5 +39,3 @@ class Media(
     }
 
 }
-
-enum class TypeMedia { SD_VIDEO, HD_VIDEO, AUDIO }

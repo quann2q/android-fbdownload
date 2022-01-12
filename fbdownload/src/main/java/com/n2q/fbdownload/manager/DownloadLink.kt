@@ -10,6 +10,11 @@ import com.n2q.fbdownload.util.FileUtil
 object DownloadLink {
 
     fun start(context: Context, externalName: String, mediaUrl: String, mediaName: String, mediaType: TypeMedia, callback: Callback): DownloadLink {
+
+        if (!FileUtil.isExistExternalDir(context, externalName)) {
+            return this
+        }
+
         val externalDir = FileUtil.externalFileDir(context, externalName).toString()
         val filename = FileUtil.generateFilename(context, externalName, mediaName, mediaType)
 
