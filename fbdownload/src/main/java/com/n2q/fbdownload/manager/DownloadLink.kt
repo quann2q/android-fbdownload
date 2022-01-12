@@ -1,16 +1,21 @@
 package com.n2q.fbdownload.manager
 
+import android.content.Context
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
-import com.n2q.fbdownload.entities.Media
+import com.n2q.fbdownload.entities.TypeMedia
+import com.n2q.fbdownload.util.FileUtil
 
-class DownloadLink(private val externalDir: String, private val filename: String, private val media: Media, private val callback: Callback) {
+object DownloadLink {
 
-    fun start(): DownloadLink {
-        callback.onPre(filename, media.url)
+    fun start(context: Context, externalName: String, mediaUrl: String, mediaName: String, mediaType: TypeMedia, callback: Callback): DownloadLink {
+        val externalDir = FileUtil.externalFileDir(context, externalName).toString()
+        val filename = FileUtil.generateFilename(context, externalName, mediaName, mediaType)
 
-        PRDownloader.download(media.url, externalDir, filename)
+        callback.onPre(filename, mediaUrl)
+
+        PRDownloader.download(mediaUrl, externalDir, filename)
             .build()
             .setOnProgressListener { progress ->
                 val percent = (progress.currentBytes * 100L) / progress.totalBytes
@@ -36,4 +41,5 @@ class DownloadLink(private val externalDir: String, private val filename: String
         fun onComplete(filename: String)
         fun onError()
     }
+
 }

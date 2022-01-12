@@ -19,7 +19,7 @@ object FileUtil {
         return true
     }
 
-    private fun generateFilename(context: Context, externalName: String, filename: String, typeMedia: TypeMedia): String {
+    fun generateFilename(context: Context, externalName: String, filename: String, typeMedia: TypeMedia): String {
         var name = String()
         var ext = String()
 
