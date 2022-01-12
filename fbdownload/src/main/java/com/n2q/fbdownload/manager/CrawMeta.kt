@@ -20,11 +20,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class CrawMeta(private val context: Context, private val callback: Callback) {
+class CrawMeta(private val context: Context, private val externalName: String, private val callback: Callback) {
 
     fun start() {
         callback.onPre()
-        val directory = FileUtil.externalFileDir(context)
+        val directory = FileUtil.externalFileDir(context, externalName)
         if (!directory.exists()) {
             callback.onComplete(ArrayList())
             return
@@ -95,7 +95,7 @@ class CrawMeta(private val context: Context, private val callback: Callback) {
      * Get detail media from external storage
      */
     private fun crawMeta(file: File, typeMedia: TypeMedia): Media {
-        val url = FileUtil.externalFileChild(context, file.name).toString()
+        val url = FileUtil.externalFileChild(context, externalName, file.name).toString()
 
         val retriever = MediaMetadataRetriever()
         retriever.setDataSource(url)
@@ -125,7 +125,7 @@ class CrawMeta(private val context: Context, private val callback: Callback) {
     private fun saveThumbInternalDir(context: Context, retriever: MediaMetadataRetriever, name: String): String {
         val icon = retriever.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST)
         val cw = ContextWrapper(context)
-        val dirThumb = cw.getDir(FileUtil.EXTERNAL_NAME + "_thumbnail", Context.MODE_PRIVATE)
+        val dirThumb = cw.getDir(externalName + "_thumbnail", Context.MODE_PRIVATE)
         if (!dirThumb.exists()) {
             dirThumb.mkdirs()
         }
